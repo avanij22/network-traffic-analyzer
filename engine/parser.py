@@ -1,5 +1,5 @@
 import sys
-from scapy.all import rdpcap, IP, TCP, UDP, ICMP, ARP
+from scapy.all import rdpcap, IP, TCP, UDP, ICMP, ARP, DNSQR
 
 
 def parse_packet(pkt):
@@ -13,6 +13,7 @@ def parse_packet(pkt):
             "ts": ts, "src_ip": pkt[ARP].psrc, "dst_ip": pkt[ARP].pdst,
             "src_port": None, "dst_port": None, "protocol": "ARP",
             "flags": "", "size": size, "src_mac": pkt[ARP].hwsrc,
+            "dns_name": None,
         }
 
     if IP not in pkt:
@@ -21,7 +22,7 @@ def parse_packet(pkt):
     record = {
         "ts": ts, "src_ip": pkt[IP].src, "dst_ip": pkt[IP].dst,
         "src_port": None, "dst_port": None, "protocol": "OTHER",
-        "flags": "", "size": size, "src_mac": None,
+        "flags": "", "size": size, "src_mac": None, "dns_name": None,
     }
 
     if TCP in pkt:
@@ -35,6 +36,12 @@ def parse_packet(pkt):
         # Decision: UDP on port 53 is counted as DNS, not UDP
         is_dns = 53 in (pkt[UDP].sport, pkt[UDP].dport)
         record["protocol"] = "DNS" if is_dns else "UDP"
+        if is_dns and DNSQR in pkt:
+            name = pkt[DNSQR].qname
+            record["dns_name"] = (
+                name.decode(errors="ignore").rstrip(".")
+                if isinstance(name, bytes) else str(name)
+            )
     elif ICMP in pkt:
         record["protocol"] = "ICMP"
 

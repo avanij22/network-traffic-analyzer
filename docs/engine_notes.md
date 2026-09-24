@@ -100,3 +100,8 @@ python engine/generate_pcaps.py
 - Kept in a separate script so the existing PCAPs are not regenerated (they use random numbers and the web side is building against them).
 - arp_spoof: legitimate ARP replies first, then from 8 s the attacker (de:ad:be:ef:00:66) claims 192.168.1.1, which normally belongs to aa:bb:cc:00:00:01.
 - dns_tunnel: 192.168.1.30 sends 400 DNS queries in ~5 s with random ~75-character names. Normal hosts send ~5 per window with short names.
+
+## Step 7: Parser update for DNS
+- Parser now records `dns_name` (the query name) for DNS packets, `None` otherwise.
+- Needed for the DNS anomaly detector (name length).
+- Re-checked: normal.pcap still gives 0 alerts.
