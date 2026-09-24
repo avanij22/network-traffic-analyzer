@@ -94,3 +94,9 @@ python engine/generate_pcaps.py
 - `engine/export.py`: `analyze_pcap(path)` takes a PCAP path and returns stats and alerts in the README format.
 - Sample output for all three PCAPs is saved in `data/output/`, so the web side can build against real data.
 - Result: normal = 8 windows, 0 alerts; port_scan = 4 windows, 4 alerts; syn_flood = 4 windows, 4 alerts.
+
+## Step 6: Extra test traffic (ARP spoof, DNS tunnel)
+- `engine/generate_extra_pcaps.py` creates `arp_spoof.pcap` and `dns_tunnel.pcap`.
+- Kept in a separate script so the existing PCAPs are not regenerated (they use random numbers and the web side is building against them).
+- arp_spoof: legitimate ARP replies first, then from 8 s the attacker (de:ad:be:ef:00:66) claims 192.168.1.1, which normally belongs to aa:bb:cc:00:00:01.
+- dns_tunnel: 192.168.1.30 sends 400 DNS queries in ~5 s with random ~75-character names. Normal hosts send ~5 per window with short names.
