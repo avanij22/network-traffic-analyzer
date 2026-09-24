@@ -105,3 +105,22 @@ python engine/generate_pcaps.py
 - Parser now records `dns_name` (the query name) for DNS packets, `None` otherwise.
 - Needed for the DNS anomaly detector (name length).
 - Re-checked: normal.pcap still gives 0 alerts.
+
+## Step 8: ARP spoof and DNS anomaly detectors
+- `engine/detectors.py` now has five detectors (port scan, SYN flood, traffic spike, ARP spoof, DNS anomaly).
+- ARP spoof: keeps a table of ip -> first MAC seen (across windows). An ARP packet claiming the same IP with a different MAC raises a high-severity alert.
+- DNS anomaly: per host per window, alert if >= 100 queries or >= 50 queries with names longer than 50 characters.
+- Thresholds: DNS_MIN_QUERIES=100, DNS_LONG_NAME=50, DNS_MIN_LONG_QUERIES=50.
+
+### Results
+| File | Result |
+|---|---|
+| normal.pcap | 0 alerts |
+| port_scan.pcap | 2 port_scan + 2 traffic_spike |
+| syn_flood.pcap | 2 syn_flood + 2 traffic_spike |
+| arp_spoof.pcap | 1 arp_spoof (192.168.1.1: aa:bb:cc:00:00:01 -> de:ad:be:ef:00:66) |
+| dns_tunnel.pcap | 2 dns_anomaly (160 + 240 = 400 queries, avg name length 70) + 2 traffic_spike |
+
+### Limitations
+- The ARP detector trusts the first MAC it sees. If the attacker's reply came first, it would be trusted instead.
+- Normal hosts send ~5 DNS queries per window with short names, so the thresholds are far from normal traffic. Real networks would need tuning.

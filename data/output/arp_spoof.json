@@ -1,0 +1,261 @@
+{
+  "file": "arp_spoof.pcap",
+  "stats": [
+    {
+      "timestamp": "2023-11-14T22:13:20Z",
+      "window_seconds": 5,
+      "packets_per_sec": 53.0,
+      "bytes_per_sec": 12854.4,
+      "protocol_counts": {
+        "ICMP": 18,
+        "TCP": 171,
+        "DNS": 62,
+        "ARP": 14
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.16",
+          "packets": 32,
+          "bytes": 11078
+        },
+        {
+          "ip": "192.168.1.15",
+          "packets": 29,
+          "bytes": 8477
+        },
+        {
+          "ip": "192.168.1.13",
+          "packets": 27,
+          "bytes": 6929
+        },
+        {
+          "ip": "192.168.1.11",
+          "packets": 27,
+          "bytes": 6271
+        },
+        {
+          "ip": "192.168.1.17",
+          "packets": 25,
+          "bytes": 4854
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 99
+        },
+        {
+          "port": 53,
+          "packets": 62
+        },
+        {
+          "port": 443,
+          "packets": 53
+        },
+        {
+          "port": 24103,
+          "packets": 1
+        },
+        {
+          "port": 60816,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:25Z",
+      "window_seconds": 5,
+      "packets_per_sec": 53.2,
+      "bytes_per_sec": 12070.2,
+      "protocol_counts": {
+        "TCP": 170,
+        "ICMP": 21,
+        "ARP": 16,
+        "DNS": 59
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.15",
+          "packets": 34,
+          "bytes": 7700
+        },
+        {
+          "ip": "192.168.1.17",
+          "packets": 33,
+          "bytes": 7074
+        },
+        {
+          "ip": "192.168.1.19",
+          "packets": 27,
+          "bytes": 8846
+        },
+        {
+          "ip": "192.168.1.10",
+          "packets": 27,
+          "bytes": 7111
+        },
+        {
+          "ip": "192.168.1.16",
+          "packets": 26,
+          "bytes": 7619
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 97
+        },
+        {
+          "port": 53,
+          "packets": 59
+        },
+        {
+          "port": 443,
+          "packets": 53
+        },
+        {
+          "port": 21957,
+          "packets": 1
+        },
+        {
+          "port": 21695,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:30Z",
+      "window_seconds": 5,
+      "packets_per_sec": 50.0,
+      "bytes_per_sec": 11792.6,
+      "protocol_counts": {
+        "DNS": 60,
+        "TCP": 166,
+        "ICMP": 24
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.18",
+          "packets": 28,
+          "bytes": 7707
+        },
+        {
+          "ip": "192.168.1.19",
+          "packets": 28,
+          "bytes": 6730
+        },
+        {
+          "ip": "192.168.1.10",
+          "packets": 28,
+          "bytes": 8897
+        },
+        {
+          "ip": "192.168.1.17",
+          "packets": 27,
+          "bytes": 5156
+        },
+        {
+          "ip": "192.168.1.13",
+          "packets": 26,
+          "bytes": 6474
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 94
+        },
+        {
+          "port": 53,
+          "packets": 60
+        },
+        {
+          "port": 443,
+          "packets": 52
+        },
+        {
+          "port": 57372,
+          "packets": 1
+        },
+        {
+          "port": 42705,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:35Z",
+      "window_seconds": 5,
+      "packets_per_sec": 40.6,
+      "bytes_per_sec": 10329.6,
+      "protocol_counts": {
+        "TCP": 149,
+        "DNS": 42,
+        "ICMP": 12
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.19",
+          "packets": 28,
+          "bytes": 6816
+        },
+        {
+          "ip": "192.168.1.11",
+          "packets": 25,
+          "bytes": 8067
+        },
+        {
+          "ip": "192.168.1.12",
+          "packets": 23,
+          "bytes": 3777
+        },
+        {
+          "ip": "192.168.1.13",
+          "packets": 22,
+          "bytes": 5443
+        },
+        {
+          "ip": "192.168.1.14",
+          "packets": 20,
+          "bytes": 5005
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 82
+        },
+        {
+          "port": 443,
+          "packets": 49
+        },
+        {
+          "port": 53,
+          "packets": 42
+        },
+        {
+          "port": 59603,
+          "packets": 1
+        },
+        {
+          "port": 35588,
+          "packets": 1
+        }
+      ]
+    }
+  ],
+  "alerts": [
+    {
+      "timestamp": "2023-11-14T22:13:25Z",
+      "type": "arp_spoof",
+      "severity": "high",
+      "source_ip": "192.168.1.1",
+      "explanation": "192.168.1.1 was first seen at MAC aa:bb:cc:00:00:01, now claims MAC de:ad:be:ef:00:66 (possible ARP spoofing).",
+      "details": {
+        "ip": "192.168.1.1",
+        "original_mac": "aa:bb:cc:00:00:01",
+        "new_mac": "de:ad:be:ef:00:66"
+      }
+    }
+  ]
+}
