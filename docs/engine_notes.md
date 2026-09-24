@@ -53,3 +53,19 @@ python engine/generate_pcaps.py
 - Window size is 5 seconds.
 - Synthetic traffic first, real `nmap` and `hping3` captures later.
 - Thresholds are not set yet. They will be tuned after the detectors are built.
+
+## Step 2: Parser
+
+**What I built:** `engine/parser.py`. It reads a PCAP with Scapy and returns a list of simple records, one per packet.
+
+**Each record has:** timestamp, source IP, destination IP, source port, destination port, protocol, TCP flags, size, and source MAC (for ARP).
+
+**Decisions:**
+- UDP traffic on port 53 is labelled `DNS`, not `UDP`.
+- ARP packets are kept, since ARP spoofing detection needs them later.
+- Packets that are not IP or ARP are skipped.
+- Records are sorted by timestamp.
+
+**How to run:** `python engine/parser.py data/port_scan.pcap`
+
+**How I checked it:** ran it on all three PCAPs and confirmed the protocol counts and that the attack packets show flags `S`.
