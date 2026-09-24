@@ -89,3 +89,8 @@ python engine/generate_pcaps.py
 - port_scan.pcap: 2 port_scan alerts (400 and 600 ports) + 2 traffic_spike, no syn_flood
 - syn_flood.pcap: 2 syn_flood alerts (~2000 SYNs, 1% answered) + 2 traffic_spike, no port_scan
 - Each attack straddles a window boundary, so it shows up as two alerts.
+
+## Step 5: Export for backend
+- `engine/export.py`: `analyze_pcap(path)` takes a PCAP path and returns stats and alerts in the README format.
+- Sample output for all three PCAPs is saved in `data/output/`, so the web side can build against real data.
+- Result: normal = 8 windows, 0 alerts; port_scan = 4 windows, 4 alerts; syn_flood = 4 windows, 4 alerts.
