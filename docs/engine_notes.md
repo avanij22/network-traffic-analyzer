@@ -85,11 +85,7 @@ python engine/generate_pcaps.py
 - Limitation: very short baseline in the test files.
 
 ## Step 4 results
-| File | Expected | Result |
-|---|---|---|
-| normal.pcap | no alerts | 0 alerts |
-| port_scan.pcap | port scan | 2 port_scan (400, 600 ports) + 2 spike, no syn_flood |
-| syn_flood.pcap | SYN flood | 2 syn_flood (~2000 SYNs, 1% answered) + 2 spike, no port_scan |
-
-Each attack straddles a window boundary, so it appears as two alerts.
-The scan was split 400/600 and the flood ~2000/~2000.
+- normal.pcap: 0 alerts
+- port_scan.pcap: 2 port_scan alerts (400 and 600 ports) + 2 traffic_spike, no syn_flood
+- syn_flood.pcap: 2 syn_flood alerts (~2000 SYNs, 1% answered) + 2 traffic_spike, no port_scan
+- Each attack straddles a window boundary, so it shows up as two alerts.
