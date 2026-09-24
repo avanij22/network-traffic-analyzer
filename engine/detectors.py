@@ -11,6 +11,9 @@ SYN_FLOOD_MAX_COMPLETION = 0.2 # SYN-ACK replies / SYNs at or below this = hands
 SPIKE_Z = 3                    # z-score above the recent average
 SPIKE_MIN_HISTORY = 1          # captures are short; raise this for longer captures
 SPIKE_HISTORY = 6              # how many previous normal windows form the baseline
+DNS_MIN_QUERIES = 100          # DNS queries from one host per window
+DNS_LONG_NAME = 50             # names longer than this many characters count as "long"
+DNS_MIN_LONG_QUERIES = 50      # long-name queries from one host per window
 
 
 def make_alert(start_ts, type_, severity, source_ip, explanation, details):
@@ -73,6 +76,57 @@ def detect_syn_flood(recs, start_ts):
     return alerts
 
 
+def detect_arp_spoof(recs, start_ts, arp_table):
+    """Same IP seen with a different MAC than before.
+    arp_table maps ip -> first MAC seen and persists across windows."""
+    alerts = []
+    for r in recs:
+        if r["protocol"] != "ARP" or not r["src_mac"]:
+            continue
+        ip, mac = r["src_ip"], r["src_mac"]
+        known = arp_table.get(ip)
+        if known is None:
+            arp_table[ip] = mac
+        elif known != mac:
+            alerts.append(make_alert(
+                start_ts, "arp_spoof", "high", ip,
+                f"{ip} was first seen at MAC {known}, now claims MAC {mac} "
+                f"(possible ARP spoofing).",
+                {"ip": ip, "original_mac": known, "new_mac": mac}))
+    # one alert per (ip, new_mac) per window
+    seen, unique = set(), []
+    for a in alerts:
+        k = (a["source_ip"], a["details"]["new_mac"])
+        if k not in seen:
+            seen.add(k)
+            unique.append(a)
+    return unique
+
+
+def detect_dns_anomaly(recs, start_ts):
+    """A host sending very many DNS queries, or many very long names."""
+    total, long_, length_sum = Counter(), Counter(), Counter()
+    for r in recs:
+        if r["protocol"] == "DNS" and r["dns_name"] and r["dst_port"] == 53:
+            total[r["src_ip"]] += 1
+            length_sum[r["src_ip"]] += len(r["dns_name"])
+            if len(r["dns_name"]) > DNS_LONG_NAME:
+                long_[r["src_ip"]] += 1
+
+    alerts = []
+    for ip, n in total.items():
+        if n >= DNS_MIN_QUERIES or long_[ip] >= DNS_MIN_LONG_QUERIES:
+            avg = length_sum[ip] / n
+            sev = "high" if long_[ip] >= DNS_MIN_LONG_QUERIES else "medium"
+            alerts.append(make_alert(
+                start_ts, "dns_anomaly", sev, ip,
+                f"{ip} sent {n} DNS queries in {WINDOW} seconds with an average "
+                f"name length of {avg:.0f} characters (possible DNS tunneling).",
+                {"queries": n, "long_queries": long_[ip],
+                 "avg_name_length": round(avg, 1), "window_seconds": WINDOW}))
+    return alerts
+
+
 def detect_spike(stats, baseline, start_ts):
     """Packets/sec far above the recent average (z-score)."""
     if len(baseline) < SPIKE_MIN_HISTORY:
@@ -96,11 +150,14 @@ def detect_pcap(path):
     """Returns (stats_list, alerts_list) for a PCAP."""
     records = parse_pcap(path)
     all_stats, all_alerts, baseline = [], [], []
+    arp_table = {}
     for start, recs in build_windows(records):
         stats = compute_stats(start, recs)
         all_stats.append(stats)
         all_alerts += detect_port_scan(recs, start)
         all_alerts += detect_syn_flood(recs, start)
+        all_alerts += detect_arp_spoof(recs, start, arp_table)
+        all_alerts += detect_dns_anomaly(recs, start)
         spike = detect_spike(stats, baseline, start)
         if spike:
             all_alerts.append(spike)
