@@ -69,3 +69,27 @@ python engine/generate_pcaps.py
 **How to run:** `python engine/parser.py data/port_scan.pcap`
 
 **How I checked it:** ran it on all three PCAPs and confirmed the protocol counts and that the attack packets show flags `S`.
+
+## Step 3: Window stats
+- `engine/windows.py` groups parsed packets into fixed 5-second windows and builds the stats JSON.
+- Window timestamp = start of the window. Top 5 talkers by source IP, top 5 destination ports.
+- The last window can be partial (capture ends mid-window), so its packets/sec looks low.
+- Verified: normal ~50 pps; scan windows show 400 and 600 packets from 192.168.1.66; flood windows show 2000 each.
+
+## Step 4: Detectors
+- `engine/detectors.py`: port scan, SYN flood, traffic spike.
+- Port scan: >= 100 distinct dst ports from one source to one target in a window.
+- SYN flood: >= 300 SYNs to one ip:port in a window and <= 20% answered by SYN-ACK.
+- Spike: z-score >= 3 versus the mean of recent non-spike windows (std floored at 10% of the mean).
+- Each attack appears in two windows, so it produces two alerts.
+- Limitation: very short baseline in the test files.
+
+## Step 4 results
+| File | Expected | Result |
+|---|---|---|
+| normal.pcap | no alerts | 0 alerts |
+| port_scan.pcap | port scan | 2 port_scan (400, 600 ports) + 2 spike, no syn_flood |
+| syn_flood.pcap | SYN flood | 2 syn_flood (~2000 SYNs, 1% answered) + 2 spike, no port_scan |
+
+Each attack straddles a window boundary, so it appears as two alerts.
+The scan was split 400/600 and the flood ~2000/~2000.
