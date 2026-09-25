@@ -124,3 +124,18 @@ python engine/generate_pcaps.py
 ### Limitations
 - The ARP detector trusts the first MAC it sees. If the attacker's reply came first, it would be trusted instead.
 - Normal hosts send ~5 DNS queries per window with short names, so the thresholds are far from normal traffic. Real networks would need tuning.
+
+## Step 9: Alert merging
+- `merge_alerts()` in detectors.py combines consecutive alerts of the same type and source_ip (from adjacent windows) into one.
+- `_rebuild_explanation()` recomputes the explanation text from the combined totals across all merged windows (e.g. port_scan sums distinct ports, syn_flood sums SYN count, dns_anomaly sums queries, traffic_spike shows the peak pps/z-score), so the text always matches the real scale of the attack.
+- Full per-window detail is kept in details.per_window for anyone who wants the breakdown.
+- Result after merging: port_scan 4->2 alerts, syn_flood 4->2, dns_tunnel 4->2, arp_spoof unchanged (1).
+
+### Results (final)
+| File | Alerts |
+|---|---|
+| normal.pcap | 0 |
+| port_scan.pcap | 1 port_scan (1000 ports, 10s) + 1 traffic_spike |
+| syn_flood.pcap | 1 syn_flood (4039 SYNs, 10s) + 1 traffic_spike |
+| arp_spoof.pcap | 1 arp_spoof |
+| dns_tunnel.pcap | 1 dns_anomaly (400 queries, 10s) + 1 traffic_spike |

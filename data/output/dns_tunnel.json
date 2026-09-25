@@ -248,12 +248,23 @@
       "type": "dns_anomaly",
       "severity": "high",
       "source_ip": "192.168.1.30",
-      "explanation": "192.168.1.30 sent 160 DNS queries in 5 seconds with an average name length of 70 characters (possible DNS tunneling).",
+      "explanation": "192.168.1.30 sent 400 DNS queries over 10 seconds with an average name length of 70 characters (possible DNS tunneling). (seen in 2 consecutive windows, 2023-11-14T22:13:25Z to 2023-11-14T22:13:30Z.)",
       "details": {
-        "queries": 160,
-        "long_queries": 160,
-        "avg_name_length": 70.0,
-        "window_seconds": 5
+        "windows_merged": 2,
+        "per_window": [
+          {
+            "queries": 160,
+            "long_queries": 160,
+            "avg_name_length": 70.0,
+            "window_seconds": 5
+          },
+          {
+            "queries": 240,
+            "long_queries": 240,
+            "avg_name_length": 70.0,
+            "window_seconds": 5
+          }
+        ]
       }
     },
     {
@@ -261,36 +272,21 @@
       "type": "traffic_spike",
       "severity": "medium",
       "source_ip": null,
-      "explanation": "Traffic rose to 82.0 packets/sec, against a recent average of 50.2 (z-score 6.3).",
+      "explanation": "Traffic rose to 98.0 packets/sec at its peak, against a recent average of 50.2 (peak z-score 9.5). (seen in 2 consecutive windows, 2023-11-14T22:13:25Z to 2023-11-14T22:13:30Z.)",
       "details": {
-        "packets_per_sec": 82.0,
-        "baseline_mean": 50.2,
-        "z_score": 6.3
-      }
-    },
-    {
-      "timestamp": "2023-11-14T22:13:30Z",
-      "type": "dns_anomaly",
-      "severity": "high",
-      "source_ip": "192.168.1.30",
-      "explanation": "192.168.1.30 sent 240 DNS queries in 5 seconds with an average name length of 70 characters (possible DNS tunneling).",
-      "details": {
-        "queries": 240,
-        "long_queries": 240,
-        "avg_name_length": 70.0,
-        "window_seconds": 5
-      }
-    },
-    {
-      "timestamp": "2023-11-14T22:13:30Z",
-      "type": "traffic_spike",
-      "severity": "medium",
-      "source_ip": null,
-      "explanation": "Traffic rose to 98.0 packets/sec, against a recent average of 50.2 (z-score 9.5).",
-      "details": {
-        "packets_per_sec": 98.0,
-        "baseline_mean": 50.2,
-        "z_score": 9.5
+        "windows_merged": 2,
+        "per_window": [
+          {
+            "packets_per_sec": 82.0,
+            "baseline_mean": 50.2,
+            "z_score": 6.3
+          },
+          {
+            "packets_per_sec": 98.0,
+            "baseline_mean": 50.2,
+            "z_score": 9.5
+          }
+        ]
       }
     }
   ]

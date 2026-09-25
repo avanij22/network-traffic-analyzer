@@ -248,13 +248,25 @@
       "type": "syn_flood",
       "severity": "high",
       "source_ip": "192.168.1.66",
-      "explanation": "2024 SYN packets hit 192.168.1.100:80 in 5 seconds and only 1% were answered with SYN-ACK (possible SYN flood).",
+      "explanation": "4039 SYN packets hit 192.168.1.100:80 over 10 seconds and only 1% were answered with SYN-ACK (possible SYN flood). (seen in 2 consecutive windows, 2023-11-14T22:13:25Z to 2023-11-14T22:13:30Z.)",
       "details": {
-        "target_ip": "192.168.1.100",
-        "target_port": 80,
-        "syn_count": 2024,
-        "completion_ratio": 0.011,
-        "window_seconds": 5
+        "windows_merged": 2,
+        "per_window": [
+          {
+            "target_ip": "192.168.1.100",
+            "target_port": 80,
+            "syn_count": 2024,
+            "completion_ratio": 0.011,
+            "window_seconds": 5
+          },
+          {
+            "target_ip": "192.168.1.100",
+            "target_port": 80,
+            "syn_count": 2015,
+            "completion_ratio": 0.008,
+            "window_seconds": 5
+          }
+        ]
       }
     },
     {
@@ -262,37 +274,21 @@
       "type": "traffic_spike",
       "severity": "high",
       "source_ip": null,
-      "explanation": "Traffic rose to 450.2 packets/sec, against a recent average of 50.2 (z-score 79.7).",
+      "explanation": "Traffic rose to 450.2 packets/sec at its peak, against a recent average of 50.2 (peak z-score 79.7). (seen in 2 consecutive windows, 2023-11-14T22:13:25Z to 2023-11-14T22:13:30Z.)",
       "details": {
-        "packets_per_sec": 450.2,
-        "baseline_mean": 50.2,
-        "z_score": 79.7
-      }
-    },
-    {
-      "timestamp": "2023-11-14T22:13:30Z",
-      "type": "syn_flood",
-      "severity": "high",
-      "source_ip": "192.168.1.66",
-      "explanation": "2015 SYN packets hit 192.168.1.100:80 in 5 seconds and only 1% were answered with SYN-ACK (possible SYN flood).",
-      "details": {
-        "target_ip": "192.168.1.100",
-        "target_port": 80,
-        "syn_count": 2015,
-        "completion_ratio": 0.008,
-        "window_seconds": 5
-      }
-    },
-    {
-      "timestamp": "2023-11-14T22:13:30Z",
-      "type": "traffic_spike",
-      "severity": "high",
-      "source_ip": null,
-      "explanation": "Traffic rose to 449.8 packets/sec, against a recent average of 50.2 (z-score 79.6).",
-      "details": {
-        "packets_per_sec": 449.8,
-        "baseline_mean": 50.2,
-        "z_score": 79.6
+        "windows_merged": 2,
+        "per_window": [
+          {
+            "packets_per_sec": 450.2,
+            "baseline_mean": 50.2,
+            "z_score": 79.7
+          },
+          {
+            "packets_per_sec": 449.8,
+            "baseline_mean": 50.2,
+            "z_score": 79.6
+          }
+        ]
       }
     }
   ]

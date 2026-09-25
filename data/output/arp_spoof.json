@@ -252,9 +252,14 @@
       "source_ip": "192.168.1.1",
       "explanation": "192.168.1.1 was first seen at MAC aa:bb:cc:00:00:01, now claims MAC de:ad:be:ef:00:66 (possible ARP spoofing).",
       "details": {
-        "ip": "192.168.1.1",
-        "original_mac": "aa:bb:cc:00:00:01",
-        "new_mac": "de:ad:be:ef:00:66"
+        "windows_merged": 1,
+        "per_window": [
+          {
+            "ip": "192.168.1.1",
+            "original_mac": "aa:bb:cc:00:00:01",
+            "new_mac": "de:ad:be:ef:00:66"
+          }
+        ]
       }
     }
   ]

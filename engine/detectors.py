@@ -1,5 +1,6 @@
 import sys
 import statistics
+from datetime import datetime, timezone
 from collections import Counter, defaultdict
 from parser import parse_pcap
 from windows import build_windows, compute_stats, iso, WINDOW
@@ -146,6 +147,113 @@ def detect_spike(stats, baseline, start_ts):
     return None
 
 
+# ---------- alert merging ----------
+
+def _seconds_between(ts1, ts2):
+    fmt = "%Y-%m-%dT%H:%M:%SZ"
+    t1 = datetime.strptime(ts1, fmt).replace(tzinfo=timezone.utc)
+    t2 = datetime.strptime(ts2, fmt).replace(tzinfo=timezone.utc)
+    return abs((t2 - t1).total_seconds())
+
+
+def _start(a):
+    c = dict(a)
+    c["_last_ts"] = a["timestamp"]
+    c["_first_ts"] = a["timestamp"]
+    c["_count"] = 1
+    c["_details_list"] = [a["details"]]
+    return c
+
+
+def _combine(current, a):
+    current["_last_ts"] = a["timestamp"]
+    current["_count"] += 1
+    current["_details_list"].append(a["details"])
+    order = {"low": 0, "medium": 1, "high": 2}
+    if order[a["severity"]] > order[current["severity"]]:
+        current["severity"] = a["severity"]
+    return current
+
+
+def _rebuild_explanation(type_, source_ip, details_list, n):
+    """Build an accurate explanation using totals summed across all merged windows."""
+    if type_ == "port_scan":
+        total_ports = sum(d["distinct_ports"] for d in details_list)
+        target = details_list[0]["target_ip"]
+        total_window = n * details_list[0]["window_seconds"]
+        return (f"{source_ip} sent SYN packets to {total_ports} distinct ports on {target} "
+                f"over {total_window} seconds (possible port scan).")
+    if type_ == "syn_flood":
+        total_syns = sum(d["syn_count"] for d in details_list)
+        target = details_list[0]["target_ip"]
+        port = details_list[0]["target_port"]
+        avg_completion = sum(d["completion_ratio"] for d in details_list) / n
+        total_window = n * details_list[0]["window_seconds"]
+        return (f"{total_syns} SYN packets hit {target}:{port} over {total_window} seconds and only "
+                f"{avg_completion:.0%} were answered with SYN-ACK (possible SYN flood).")
+    if type_ == "dns_anomaly":
+        total_queries = sum(d["queries"] for d in details_list)
+        avg_len = sum(d["avg_name_length"] * d["queries"] for d in details_list) / total_queries
+        total_window = n * details_list[0]["window_seconds"]
+        return (f"{source_ip} sent {total_queries} DNS queries over {total_window} seconds with an "
+                f"average name length of {avg_len:.0f} characters (possible DNS tunneling).")
+    if type_ == "traffic_spike":
+        max_pps = max(d["packets_per_sec"] for d in details_list)
+        max_z = max(d["z_score"] for d in details_list)
+        mean = details_list[0]["baseline_mean"]
+        return (f"Traffic rose to {max_pps} packets/sec at its peak, against a recent average of "
+                f"{mean} (peak z-score {max_z}).")
+    return None  # unmerged / single-window types (e.g. arp_spoof) keep their original text
+
+
+def _finalize(current):
+    n = current["_count"]
+    first, last = current["_first_ts"], current["_last_ts"]
+    explanation = current["explanation"]
+    if n > 1:
+        rebuilt = _rebuild_explanation(current["type"], current["source_ip"], current["_details_list"], n)
+        if rebuilt:
+            explanation = rebuilt + f" (seen in {n} consecutive windows, {first} to {last}.)"
+    return {
+        "timestamp": first,
+        "type": current["type"],
+        "severity": current["severity"],
+        "source_ip": current["source_ip"],
+        "explanation": explanation,
+        "details": {"windows_merged": n, "per_window": current["_details_list"]},
+    }
+
+
+def merge_alerts(alerts, window=WINDOW, gap=1):
+    """Combine consecutive alerts of the same type and source into one.
+    Two alerts merge if they're the same type, same source_ip, and their
+    windows are adjacent (start time within `gap` windows of each other)."""
+    if not alerts:
+        return []
+
+    def sort_key(a):
+        return (a["type"], a["source_ip"] or "", a["timestamp"])
+    ordered = sorted(alerts, key=sort_key)
+
+    merged = []
+    current = None
+    for a in ordered:
+        if current and a["type"] == current["type"] and a["source_ip"] == current["source_ip"] \
+                and _seconds_between(current["_last_ts"], a["timestamp"]) <= window * (gap + 1):
+            current = _combine(current, a)
+        else:
+            if current:
+                merged.append(_finalize(current))
+            current = _start(a)
+    if current:
+        merged.append(_finalize(current))
+
+    merged.sort(key=lambda a: a["timestamp"])
+    return merged
+
+
+# ---------- main pipeline ----------
+
 def detect_pcap(path):
     """Returns (stats_list, alerts_list) for a PCAP."""
     records = parse_pcap(path)
@@ -164,7 +272,7 @@ def detect_pcap(path):
         else:  # only normal windows feed the baseline
             baseline.append(stats["packets_per_sec"])
             baseline[:] = baseline[-SPIKE_HISTORY:]
-    return all_stats, all_alerts
+    return all_stats, merge_alerts(all_alerts)
 
 
 if __name__ == "__main__":
