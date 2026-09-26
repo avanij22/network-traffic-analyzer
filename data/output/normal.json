@@ -1,0 +1,486 @@
+{
+  "file": "normal.pcap",
+  "stats": [
+    {
+      "timestamp": "2023-11-14T22:13:20Z",
+      "window_seconds": 5,
+      "packets_per_sec": 50.2,
+      "bytes_per_sec": 11822.6,
+      "protocol_counts": {
+        "TCP": 173,
+        "ICMP": 24,
+        "DNS": 54
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.15",
+          "packets": 33,
+          "bytes": 8464
+        },
+        {
+          "ip": "192.168.1.12",
+          "packets": 25,
+          "bytes": 6373
+        },
+        {
+          "ip": "192.168.1.18",
+          "packets": 24,
+          "bytes": 6547
+        },
+        {
+          "ip": "192.168.1.10",
+          "packets": 23,
+          "bytes": 4678
+        },
+        {
+          "ip": "192.168.1.13",
+          "packets": 23,
+          "bytes": 4500
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 99
+        },
+        {
+          "port": 53,
+          "packets": 54
+        },
+        {
+          "port": 443,
+          "packets": 52
+        },
+        {
+          "port": 53312,
+          "packets": 1
+        },
+        {
+          "port": 27730,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:25Z",
+      "window_seconds": 5,
+      "packets_per_sec": 50.0,
+      "bytes_per_sec": 13579.2,
+      "protocol_counts": {
+        "TCP": 185,
+        "DNS": 50,
+        "ICMP": 15
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.12",
+          "packets": 29,
+          "bytes": 7086
+        },
+        {
+          "ip": "192.168.1.13",
+          "packets": 29,
+          "bytes": 10678
+        },
+        {
+          "ip": "192.168.1.14",
+          "packets": 27,
+          "bytes": 7384
+        },
+        {
+          "ip": "192.168.1.10",
+          "packets": 25,
+          "bytes": 6941
+        },
+        {
+          "ip": "192.168.1.17",
+          "packets": 23,
+          "bytes": 7181
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 99
+        },
+        {
+          "port": 443,
+          "packets": 68
+        },
+        {
+          "port": 53,
+          "packets": 50
+        },
+        {
+          "port": 54656,
+          "packets": 1
+        },
+        {
+          "port": 1271,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:30Z",
+      "window_seconds": 5,
+      "packets_per_sec": 50.0,
+      "bytes_per_sec": 12600.4,
+      "protocol_counts": {
+        "ICMP": 26,
+        "TCP": 170,
+        "DNS": 54
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.19",
+          "packets": 30,
+          "bytes": 5424
+        },
+        {
+          "ip": "192.168.1.16",
+          "packets": 29,
+          "bytes": 7257
+        },
+        {
+          "ip": "192.168.1.15",
+          "packets": 26,
+          "bytes": 6221
+        },
+        {
+          "ip": "192.168.1.18",
+          "packets": 24,
+          "bytes": 7721
+        },
+        {
+          "ip": "192.168.1.17",
+          "packets": 23,
+          "bytes": 6190
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 84
+        },
+        {
+          "port": 443,
+          "packets": 72
+        },
+        {
+          "port": 53,
+          "packets": 54
+        },
+        {
+          "port": 8318,
+          "packets": 1
+        },
+        {
+          "port": 21796,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:35Z",
+      "window_seconds": 5,
+      "packets_per_sec": 50.0,
+      "bytes_per_sec": 12613.8,
+      "protocol_counts": {
+        "ICMP": 19,
+        "TCP": 180,
+        "DNS": 51
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.15",
+          "packets": 34,
+          "bytes": 6935
+        },
+        {
+          "ip": "192.168.1.18",
+          "packets": 30,
+          "bytes": 7946
+        },
+        {
+          "ip": "192.168.1.12",
+          "packets": 27,
+          "bytes": 7580
+        },
+        {
+          "ip": "192.168.1.14",
+          "packets": 25,
+          "bytes": 7932
+        },
+        {
+          "ip": "192.168.1.16",
+          "packets": 22,
+          "bytes": 4046
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 93
+        },
+        {
+          "port": 443,
+          "packets": 66
+        },
+        {
+          "port": 53,
+          "packets": 51
+        },
+        {
+          "port": 15171,
+          "packets": 1
+        },
+        {
+          "port": 26455,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:40Z",
+      "window_seconds": 5,
+      "packets_per_sec": 50.0,
+      "bytes_per_sec": 10824.2,
+      "protocol_counts": {
+        "TCP": 186,
+        "DNS": 44,
+        "ICMP": 20
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.18",
+          "packets": 32,
+          "bytes": 6501
+        },
+        {
+          "ip": "192.168.1.100",
+          "packets": 30,
+          "bytes": 1620
+        },
+        {
+          "ip": "192.168.1.17",
+          "packets": 27,
+          "bytes": 6664
+        },
+        {
+          "ip": "192.168.1.12",
+          "packets": 26,
+          "bytes": 7524
+        },
+        {
+          "ip": "192.168.1.15",
+          "packets": 25,
+          "bytes": 6646
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 109
+        },
+        {
+          "port": 443,
+          "packets": 47
+        },
+        {
+          "port": 53,
+          "packets": 44
+        },
+        {
+          "port": 25394,
+          "packets": 1
+        },
+        {
+          "port": 51741,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:45Z",
+      "window_seconds": 5,
+      "packets_per_sec": 50.0,
+      "bytes_per_sec": 12716.0,
+      "protocol_counts": {
+        "TCP": 174,
+        "ICMP": 23,
+        "DNS": 53
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.17",
+          "packets": 31,
+          "bytes": 9567
+        },
+        {
+          "ip": "192.168.1.18",
+          "packets": 30,
+          "bytes": 7122
+        },
+        {
+          "ip": "192.168.1.10",
+          "packets": 28,
+          "bytes": 7234
+        },
+        {
+          "ip": "192.168.1.16",
+          "packets": 25,
+          "bytes": 6688
+        },
+        {
+          "ip": "192.168.1.12",
+          "packets": 22,
+          "bytes": 6884
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 99
+        },
+        {
+          "port": 443,
+          "packets": 56
+        },
+        {
+          "port": 53,
+          "packets": 53
+        },
+        {
+          "port": 44620,
+          "packets": 1
+        },
+        {
+          "port": 22469,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:50Z",
+      "window_seconds": 5,
+      "packets_per_sec": 50.0,
+      "bytes_per_sec": 11534.8,
+      "protocol_counts": {
+        "TCP": 171,
+        "DNS": 57,
+        "ICMP": 22
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.16",
+          "packets": 30,
+          "bytes": 5265
+        },
+        {
+          "ip": "192.168.1.11",
+          "packets": 29,
+          "bytes": 8558
+        },
+        {
+          "ip": "192.168.1.14",
+          "packets": 25,
+          "bytes": 6765
+        },
+        {
+          "ip": "192.168.1.15",
+          "packets": 25,
+          "bytes": 4546
+        },
+        {
+          "ip": "192.168.1.19",
+          "packets": 25,
+          "bytes": 6368
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 98
+        },
+        {
+          "port": 53,
+          "packets": 57
+        },
+        {
+          "port": 443,
+          "packets": 51
+        },
+        {
+          "port": 42618,
+          "packets": 1
+        },
+        {
+          "port": 30884,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:55Z",
+      "window_seconds": 5,
+      "packets_per_sec": 9.4,
+      "bytes_per_sec": 2386.0,
+      "protocol_counts": {
+        "ICMP": 5,
+        "TCP": 33,
+        "DNS": 9
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.13",
+          "packets": 7,
+          "bytes": 1773
+        },
+        {
+          "ip": "192.168.1.19",
+          "packets": 7,
+          "bytes": 2084
+        },
+        {
+          "ip": "192.168.1.16",
+          "packets": 6,
+          "bytes": 1380
+        },
+        {
+          "ip": "192.168.1.10",
+          "packets": 5,
+          "bytes": 2069
+        },
+        {
+          "ip": "192.168.1.12",
+          "packets": 4,
+          "bytes": 547
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 17
+        },
+        {
+          "port": 443,
+          "packets": 13
+        },
+        {
+          "port": 53,
+          "packets": 9
+        },
+        {
+          "port": 38900,
+          "packets": 1
+        },
+        {
+          "port": 35441,
+          "packets": 1
+        }
+      ]
+    }
+  ],
+  "alerts": []
+}

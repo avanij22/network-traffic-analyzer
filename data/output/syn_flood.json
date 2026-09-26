@@ -1,0 +1,295 @@
+{
+  "file": "syn_flood.pcap",
+  "stats": [
+    {
+      "timestamp": "2023-11-14T22:13:20Z",
+      "window_seconds": 5,
+      "packets_per_sec": 50.2,
+      "bytes_per_sec": 12513.8,
+      "protocol_counts": {
+        "TCP": 183,
+        "DNS": 47,
+        "ICMP": 21
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.12",
+          "packets": 30,
+          "bytes": 9147
+        },
+        {
+          "ip": "192.168.1.15",
+          "packets": 28,
+          "bytes": 7430
+        },
+        {
+          "ip": "192.168.1.17",
+          "packets": 27,
+          "bytes": 7400
+        },
+        {
+          "ip": "192.168.1.19",
+          "packets": 26,
+          "bytes": 5973
+        },
+        {
+          "ip": "192.168.1.18",
+          "packets": 25,
+          "bytes": 5342
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 104
+        },
+        {
+          "port": 443,
+          "packets": 57
+        },
+        {
+          "port": 53,
+          "packets": 47
+        },
+        {
+          "port": 30212,
+          "packets": 1
+        },
+        {
+          "port": 36491,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:25Z",
+      "window_seconds": 5,
+      "packets_per_sec": 450.2,
+      "bytes_per_sec": 34500.2,
+      "protocol_counts": {
+        "TCP": 2189,
+        "ICMP": 19,
+        "DNS": 43
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.66",
+          "packets": 2001,
+          "bytes": 108054
+        },
+        {
+          "ip": "192.168.1.14",
+          "packets": 28,
+          "bytes": 7652
+        },
+        {
+          "ip": "192.168.1.16",
+          "packets": 27,
+          "bytes": 5649
+        },
+        {
+          "ip": "192.168.1.13",
+          "packets": 27,
+          "bytes": 7471
+        },
+        {
+          "ip": "192.168.1.19",
+          "packets": 23,
+          "bytes": 6020
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 2113
+        },
+        {
+          "port": 443,
+          "packets": 53
+        },
+        {
+          "port": 53,
+          "packets": 43
+        },
+        {
+          "port": 13521,
+          "packets": 1
+        },
+        {
+          "port": 50611,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:30Z",
+      "window_seconds": 5,
+      "packets_per_sec": 449.8,
+      "bytes_per_sec": 33192.8,
+      "protocol_counts": {
+        "TCP": 2162,
+        "DNS": 66,
+        "ICMP": 21
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.66",
+          "packets": 1999,
+          "bytes": 107946
+        },
+        {
+          "ip": "192.168.1.12",
+          "packets": 35,
+          "bytes": 6667
+        },
+        {
+          "ip": "192.168.1.16",
+          "packets": 32,
+          "bytes": 7816
+        },
+        {
+          "ip": "192.168.1.18",
+          "packets": 29,
+          "bytes": 7307
+        },
+        {
+          "ip": "192.168.1.11",
+          "packets": 22,
+          "bytes": 5700
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 2089
+        },
+        {
+          "port": 53,
+          "packets": 66
+        },
+        {
+          "port": 443,
+          "packets": 57
+        },
+        {
+          "port": 53874,
+          "packets": 1
+        },
+        {
+          "port": 45022,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:35Z",
+      "window_seconds": 5,
+      "packets_per_sec": 42.6,
+      "bytes_per_sec": 10138.0,
+      "protocol_counts": {
+        "DNS": 35,
+        "TCP": 164,
+        "ICMP": 14
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.18",
+          "packets": 27,
+          "bytes": 6793
+        },
+        {
+          "ip": "192.168.1.14",
+          "packets": 22,
+          "bytes": 6603
+        },
+        {
+          "ip": "192.168.1.17",
+          "packets": 21,
+          "bytes": 5496
+        },
+        {
+          "ip": "192.168.1.10",
+          "packets": 21,
+          "bytes": 5003
+        },
+        {
+          "ip": "192.168.1.100",
+          "packets": 21,
+          "bytes": 1134
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 91
+        },
+        {
+          "port": 443,
+          "packets": 52
+        },
+        {
+          "port": 53,
+          "packets": 35
+        },
+        {
+          "port": 33718,
+          "packets": 1
+        },
+        {
+          "port": 30981,
+          "packets": 1
+        }
+      ]
+    }
+  ],
+  "alerts": [
+    {
+      "timestamp": "2023-11-14T22:13:25Z",
+      "type": "syn_flood",
+      "severity": "high",
+      "source_ip": "192.168.1.66",
+      "explanation": "4039 SYN packets hit 192.168.1.100:80 over 10 seconds and only 1% were answered with SYN-ACK (possible SYN flood). (seen in 2 consecutive windows, 2023-11-14T22:13:25Z to 2023-11-14T22:13:30Z.)",
+      "details": {
+        "windows_merged": 2,
+        "per_window": [
+          {
+            "target_ip": "192.168.1.100",
+            "target_port": 80,
+            "syn_count": 2024,
+            "completion_ratio": 0.011,
+            "window_seconds": 5
+          },
+          {
+            "target_ip": "192.168.1.100",
+            "target_port": 80,
+            "syn_count": 2015,
+            "completion_ratio": 0.008,
+            "window_seconds": 5
+          }
+        ]
+      }
+    },
+    {
+      "timestamp": "2023-11-14T22:13:25Z",
+      "type": "traffic_spike",
+      "severity": "high",
+      "source_ip": null,
+      "explanation": "Traffic rose to 450.2 packets/sec at its peak, against a recent average of 50.2 (peak z-score 79.7). (seen in 2 consecutive windows, 2023-11-14T22:13:25Z to 2023-11-14T22:13:30Z.)",
+      "details": {
+        "windows_merged": 2,
+        "per_window": [
+          {
+            "packets_per_sec": 450.2,
+            "baseline_mean": 50.2,
+            "z_score": 79.7
+          },
+          {
+            "packets_per_sec": 449.8,
+            "baseline_mean": 50.2,
+            "z_score": 79.6
+          }
+        ]
+      }
+    }
+  ]
+}
