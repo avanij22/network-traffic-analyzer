@@ -1,0 +1,265 @@
+:root {
+  --bg: #14171C;
+  --panel: #1B1F26;
+  --border: #2A2F38;
+  --text: #E4E6EA;
+  --muted: #8A8F98;
+  --live: #4A9B8E;
+  --high: #C4544A;
+  --medium: #B98A3E;
+  --low: #4C74A8;
+
+  /* one fixed color per protocol, so traffic can be scanned by eye */
+  --proto-tcp: #4C74A8;
+  --proto-udp: #4A9B8E;
+  --proto-dns: #B98A3E;
+  --proto-icmp: #8F6BAE;
+  --proto-arp: #A8734C;
+  --proto-other: #6B7280;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Public Sans', system-ui, sans-serif;
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+h1 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+select, button {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 7px 12px;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover, select:hover {
+  border-color: var(--muted);
+}
+
+#runBtn {
+  background: var(--live);
+  border-color: var(--live);
+  color: #0B1512;
+  font-weight: 600;
+}
+
+.connection {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.connection.connected {
+  color: var(--live);
+}
+
+main {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+section {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 20px;
+}
+
+h2 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 0 0 14px;
+}
+
+/* traffic panel: this is the hero of the page, everything else is quieter */
+.traffic-panel {
+  padding: 28px 28px 20px;
+}
+
+.traffic-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.hero-value {
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--live);
+  letter-spacing: -0.02em;
+}
+
+.hero-label {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.traffic-footer {
+  display: flex;
+  gap: 28px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.mini-stat span {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* breakdown: asymmetric two-part layout, not three equal cards */
+.breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 20px;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.protocols, .tables {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 20px;
+}
+
+.tables {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.proto-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.proto-name {
+  width: 50px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.proto-track {
+  flex: 1;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.proto-fill {
+  height: 100%;
+}
+
+/* color-coded by protocol, the way a packet analyzer would highlight traffic */
+.proto-fill.tcp { background: var(--proto-tcp); }
+.proto-fill.udp { background: var(--proto-udp); }
+.proto-fill.dns { background: var(--proto-dns); }
+.proto-fill.icmp { background: var(--proto-icmp); }
+.proto-fill.arp { background: var(--proto-arp); }
+.proto-fill.other { background: var(--proto-other); }
+
+.proto-count {
+  width: 44px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--muted);
+  padding: 0 8px 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 7px 8px 7px 0;
+  border-bottom: 1px solid rgba(42, 47, 56, 0.5);
+}
+
+tbody tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.empty-row td {
+  color: var(--muted);
+  border-bottom: none;
+  padding: 12px 0;
+}
+
+/* alerts table severity coloring */
+.sev-high { color: var(--high); font-weight: 600; }
+.sev-medium { color: var(--medium); font-weight: 600; }
+.sev-low { color: var(--low); font-weight: 600; }
+
+@media (max-width: 800px) {
+  .breakdown {
+    grid-template-columns: 1fr;
+  }
+  .traffic-summary {
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+}

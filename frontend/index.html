@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Network Traffic Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="title-block">
+    <h1>Network Traffic Analyzer</h1>
+    <p class="subtitle">Live packet capture, protocol breakdown, and anomaly detection</p>
+  </div>
+  <div class="controls">
+    <select id="scenario">
+      <option value="normal">Normal traffic</option>
+      <option value="port_scan">Port scan</option>
+      <option value="syn_flood">SYN flood</option>
+      <option value="arp_spoof">ARP spoofing</option>
+      <option value="dns_tunnel">DNS tunneling</option>
+    </select>
+    <button id="runBtn">Run replay</button>
+    <button id="clearBtn">Clear</button>
+  </div>
+  <div class="connection" id="connection">connecting</div>
+</header>
+
+<main>
+
+  <section class="traffic-panel">
+    <div class="traffic-hero">
+      <span class="hero-value" id="ppsValue">0</span>
+      <span class="hero-label">packets per second</span>
+    </div>
+    <canvas id="ppsChart" height="80"></canvas>
+    <div class="traffic-footer">
+      <div class="mini-stat"><span id="windowValue">0</span> windows processed</div>
+      <div class="mini-stat"><span id="alertValue">0</span> alerts raised</div>
+    </div>
+  </section>
+
+  <section class="breakdown">
+    <div class="protocols">
+      <h2>Protocols this window</h2>
+      <div id="protoList" class="proto-list"></div>
+    </div>
+
+    <div class="tables">
+      <div class="table-block">
+        <h2>Top talkers</h2>
+        <table>
+          <thead><tr><th>IP address</th><th>Packets</th><th>Bytes</th></tr></thead>
+          <tbody id="talkersBody"></tbody>
+        </table>
+      </div>
+      <div class="table-block">
+        <h2>Top ports</h2>
+        <table>
+          <thead><tr><th>Port</th><th>Packets</th></tr></thead>
+          <tbody id="portsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="alerts">
+    <h2>Detected alerts</h2>
+    <table>
+      <thead><tr><th>Time</th><th>Severity</th><th>Type</th><th>Source</th><th>Description</th></tr></thead>
+      <tbody id="alertsBody">
+        <tr class="empty-row"><td colspan="5">No alerts yet. Run a replay to see detections here.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
