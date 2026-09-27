@@ -24,16 +24,31 @@
       <option value="syn_flood">SYN flood</option>
       <option value="arp_spoof">ARP spoofing</option>
       <option value="dns_tunnel">DNS tunneling</option>
+      <option value="mixed">Mixed attack</option>
+    </select>
+    <select id="speed">
+      <option value="1">1x — 5s per window, real time</option>
+      <option value="2">2x — 2.5s per window</option>
+      <option value="5" selected>5x — 1s per window</option>
+      <option value="10">10x — 0.5s per window</option>
     </select>
     <button id="runBtn">Run replay</button>
+    <button id="runAllBtn">Run all scenarios</button>
     <button id="clearBtn">Clear</button>
   </div>
   <div class="connection" id="connection">connecting</div>
 </header>
 
+<div class="status-bar" id="statusBar">
+  <span class="status-dot idle" id="statusDot"></span>
+  <span id="statusText">Idle — no replay running</span>
+</div>
+
 <main>
 
   <section class="traffic-panel">
+    <h2 class="panel-title">Live traffic volume</h2>
+    <p class="panel-subtitle">Packets per second, recomputed for every 5-second window of the capture. A sudden rise above the recent average is what the traffic-spike detector reacts to.</p>
     <div class="traffic-hero">
       <span class="hero-value" id="ppsValue">0</span>
       <span class="hero-label">packets per second</span>
@@ -47,20 +62,23 @@
 
   <section class="breakdown">
     <div class="protocols">
-      <h2>Protocols this window</h2>
+      <h2 class="panel-title">Protocols this window</h2>
+      <p class="panel-subtitle">Share of traffic by protocol in the most recent window. Colors match the protocol, not severity.</p>
       <div id="protoList" class="proto-list"></div>
     </div>
 
     <div class="tables">
       <div class="table-block">
-        <h2>Top talkers</h2>
+        <h2 class="panel-title">Top talkers</h2>
+        <p class="panel-subtitle">The source IPs sending the most traffic in the current window.</p>
         <table>
           <thead><tr><th>IP address</th><th>Packets</th><th>Bytes</th></tr></thead>
           <tbody id="talkersBody"></tbody>
         </table>
       </div>
       <div class="table-block">
-        <h2>Top ports</h2>
+        <h2 class="panel-title">Top ports</h2>
+        <p class="panel-subtitle">The destination ports receiving the most traffic in the current window.</p>
         <table>
           <thead><tr><th>Port</th><th>Packets</th></tr></thead>
           <tbody id="portsBody"></tbody>
@@ -70,12 +88,27 @@
   </section>
 
   <section class="alerts">
-    <h2>Detected alerts</h2>
+    <h2 class="panel-title">Detected alerts</h2>
+    <p class="panel-subtitle">Raised when a window matches a known attack pattern. Click a row to see the exact counts and thresholds behind a detection.</p>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-swatch sev-high-bg"></span>High</span>
+      <span class="legend-item"><span class="legend-swatch sev-medium-bg"></span>Medium</span>
+      <span class="legend-item"><span class="legend-swatch sev-low-bg"></span>Low</span>
+    </div>
     <table>
       <thead><tr><th>Time</th><th>Severity</th><th>Type</th><th>Source</th><th>Description</th></tr></thead>
       <tbody id="alertsBody">
         <tr class="empty-row"><td colspan="5">No alerts yet. Run a replay to see detections here.</td></tr>
       </tbody>
+    </table>
+  </section>
+
+  <section class="evaluation" id="evaluation" hidden>
+    <h2 class="panel-title">Evaluation summary</h2>
+    <p class="panel-subtitle">One pass through every scenario, showing whether each attack type was correctly detected and whether normal traffic stayed alert-free.</p>
+    <table>
+      <thead><tr><th>Scenario</th><th>Windows</th><th>Alerts raised</th><th>Alert types seen</th></tr></thead>
+      <tbody id="evalBody"></tbody>
     </table>
   </section>
 

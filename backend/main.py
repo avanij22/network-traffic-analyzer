@@ -1,4 +1,7 @@
 """FastAPI backend: REST + WebSocket + PostgreSQL. Run: uvicorn backend.main:app --reload"""
+import os
+os.environ["PATH"] = r"C:\Program Files\PostgreSQL\16\bin" + os.pathsep + os.environ.get("PATH", "")
+os.add_dll_directory(r"C:\Program Files\PostgreSQL\16\bin")
 import asyncio
 import os
 from contextlib import asynccontextmanager

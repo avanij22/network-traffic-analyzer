@@ -1,21 +1,22 @@
 :root {
-  --bg: #14171C;
-  --panel: #1B1F26;
-  --border: #2A2F38;
-  --text: #E4E6EA;
-  --muted: #8A8F98;
-  --live: #4A9B8E;
-  --high: #C4544A;
-  --medium: #B98A3E;
-  --low: #4C74A8;
+  --bg: #1B212C;
+  --panel: #242C39;
+  --panel-raised: #2B3444;
+  --border: #3A4457;
+  --text: #F3F5F8;
+  --muted: #9AA5B8;
+  --live: #45B39D;
+  --high: #E0645A;
+  --medium: #E0A63F;
+  --low: #5B93E0;
 
   /* one fixed color per protocol, so traffic can be scanned by eye */
-  --proto-tcp: #4C74A8;
-  --proto-udp: #4A9B8E;
-  --proto-dns: #B98A3E;
-  --proto-icmp: #8F6BAE;
-  --proto-arp: #A8734C;
-  --proto-other: #6B7280;
+  --proto-tcp: #5B93E0;
+  --proto-udp: #45B39D;
+  --proto-dns: #E0A63F;
+  --proto-icmp: #A57FDB;
+  --proto-arp: #D28850;
+  --proto-other: #7C8898;
 }
 
 * { box-sizing: border-box; }
@@ -95,6 +96,112 @@ button:hover, select:hover {
   color: var(--live);
 }
 
+/* live activity status bar, shown under the header */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 28px;
+  background: var(--panel-raised);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
+}
+
+.status-dot.running {
+  background: var(--live);
+}
+
+.status-dot.idle {
+  background: var(--muted);
+}
+
+.panel-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 0 0 4px;
+}
+
+.panel-subtitle {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 14px;
+  max-width: 60ch;
+  line-height: 1.5;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 1px;
+  display: inline-block;
+}
+
+.sev-high-bg { background: var(--high); }
+.sev-medium-bg { background: var(--medium); }
+.sev-low-bg { background: var(--low); }
+
+.alerts-hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin: -6px 0 14px;
+}
+
+tr.alert-row {
+  cursor: pointer;
+}
+
+tr.alert-row:hover td {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+tr.alert-detail td {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 14px 8px 14px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+tr.alert-detail pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: 'Public Sans', sans-serif;
+  color: var(--text);
+}
+
+.evaluation td span.type-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-size: 11px;
+  margin: 1px 3px 1px 0;
+  background: rgba(255, 255, 255, 0.06);
+}
+
 main {
   padding: 24px 28px;
   display: flex;
@@ -111,12 +218,7 @@ section {
   padding: 20px;
 }
 
-h2 {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-  margin: 0 0 14px;
-}
+/* h2 styling comes from .panel-title now, so header text stays neutral by default */
 
 /* traffic panel: this is the hero of the page, everything else is quieter */
 .traffic-panel {

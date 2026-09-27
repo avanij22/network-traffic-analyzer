@@ -1,5 +1,7 @@
 let windowCount = 0;
 let alertCount = 0;
+let alertTypesSeen = new Set();
+let pendingReplayResolve = null;
 
 const ppsChart = new Chart(document.getElementById('ppsChart'), {
   type: 'line',
@@ -7,7 +9,7 @@ const ppsChart = new Chart(document.getElementById('ppsChart'), {
     labels: [],
     datasets: [{
       data: [],
-      borderColor: '#4A9B8E',
+      borderColor: '#45B39D',
       borderWidth: 2,
       pointRadius: 0,
       tension: 0.2,
@@ -19,15 +21,28 @@ const ppsChart = new Chart(document.getElementById('ppsChart'), {
     animation: false,
     plugins: { legend: { display: false } },
     scales: {
-      x: { ticks: { color: '#8A8F98', font: { size: 10 } }, grid: { color: '#2A2F38' } },
-      y: { ticks: { color: '#8A8F98', font: { size: 10 } }, grid: { color: '#2A2F38' }, beginAtZero: true }
+      x: { ticks: { color: '#9AA5B8', font: { size: 10 } }, grid: { color: '#3A4457' } },
+      y: { ticks: { color: '#9AA5B8', font: { size: 10 } }, grid: { color: '#3A4457' }, beginAtZero: true }
     }
   }
 });
 
+let currentScenario = null;
+
+function setStatus(running, text) {
+  document.getElementById('statusDot').className = 'status-dot ' + (running ? 'running' : 'idle');
+  document.getElementById('statusText').textContent = text;
+}
+
 function renderStats(s) {
   windowCount++;
   document.getElementById('windowValue').textContent = windowCount;
+
+  if (currentScenario) {
+    const from = new Date(s.window_start).toLocaleTimeString();
+    const to = new Date(s.window_end).toLocaleTimeString();
+    setStatus(true, `Replaying "${currentScenario}" — window ${windowCount} — analyzing traffic from ${from} to ${to}`);
+  }
 
   const t = new Date(s.window_start).toLocaleTimeString();
   ppsChart.data.labels.push(t);
@@ -65,6 +80,7 @@ function renderStats(s) {
 
 function renderAlert(a) {
   alertCount++;
+  alertTypesSeen.add(a.type);
   document.getElementById('alertValue').textContent = alertCount;
 
   const body = document.getElementById('alertsBody');
@@ -73,6 +89,7 @@ function renderAlert(a) {
 
   const time = new Date(a.timestamp).toLocaleTimeString();
   const row = document.createElement('tr');
+  row.className = 'alert-row';
   row.innerHTML = `
     <td>${time}</td>
     <td class="sev-${a.severity}">${a.severity}</td>
@@ -80,15 +97,32 @@ function renderAlert(a) {
     <td>${a.src_ip || '\u2014'}</td>
     <td>${a.description}</td>
   `;
+
+  const detailRow = document.createElement('tr');
+  detailRow.className = 'alert-detail';
+  detailRow.style.display = 'none';
+  const td = document.createElement('td');
+  td.colSpan = 5;
+  td.innerHTML = `<pre>${JSON.stringify(a.evidence, null, 2)}</pre>`;
+  detailRow.appendChild(td);
+
+  row.addEventListener('click', () => {
+    detailRow.style.display = detailRow.style.display === 'none' ? '' : 'none';
+  });
+
+  body.prepend(detailRow);
   body.prepend(row);
 }
 
 async function startReplay() {
   const scenario = document.getElementById('scenario').value;
+  const speed = parseFloat(document.getElementById('speed').value);
+  currentScenario = scenario;
+  setStatus(true, `Starting replay of "${scenario}"...`);
   await fetch('/api/replay', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ scenario, speed: 5.0 })
+    body: JSON.stringify({ scenario, speed })
   });
 }
 
@@ -108,8 +142,10 @@ async function clearData() {
 
   windowCount = 0;
   alertCount = 0;
+  alertTypesSeen = new Set();
   document.getElementById('windowValue').textContent = '0';
   document.getElementById('alertValue').textContent = '0';
+  setStatus(false, 'Idle — no replay running');
 }
 
 async function loadHistory() {
@@ -142,10 +178,63 @@ function connectWS() {
     const msg = JSON.parse(e.data);
     if (msg.type === 'stats') renderStats(msg.data);
     if (msg.type === 'alert') renderAlert(msg.data);
+    if (msg.type === 'replay_done' && pendingReplayResolve) {
+      setStatus(false, `Finished replaying "${msg.data.scenario}" — ${windowCount} windows processed, ${alertCount} alerts raised`);
+      pendingReplayResolve(msg.data.scenario);
+      pendingReplayResolve = null;
+    }
   };
 }
 
+function waitForReplayDone() {
+  return new Promise((resolve) => { pendingReplayResolve = resolve; });
+}
+
+const SCENARIOS_FOR_EVAL = ['normal', 'port_scan', 'syn_flood', 'arp_spoof', 'dns_tunnel', 'mixed'];
+
+async function runAllScenarios() {
+  const runAllBtn = document.getElementById('runAllBtn');
+  runAllBtn.disabled = true;
+  const evalSection = document.getElementById('evaluation');
+  const evalBody = document.getElementById('evalBody');
+  evalBody.innerHTML = '';
+  evalSection.hidden = false;
+
+  for (const scenario of SCENARIOS_FOR_EVAL) {
+    await clearData();
+    document.getElementById('scenario').value = scenario;
+    currentScenario = scenario;
+    setStatus(true, `Run all: starting "${scenario}"...`);
+
+    const done = waitForReplayDone();
+    await fetch('/api/replay', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scenario, speed: 10.0 })
+    });
+    await done;
+    await new Promise(r => setTimeout(r, 300)); // let the backend fully close out the previous replay task
+
+    const typesList = [...alertTypesSeen]
+      .map(t => `<span class="type-tag">${t}</span>`)
+      .join('') || '\u2014';
+
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${scenario}</td>
+      <td>${windowCount}</td>
+      <td>${alertCount}</td>
+      <td>${typesList}</td>
+    `;
+    evalBody.appendChild(row);
+  }
+
+  runAllBtn.disabled = false;
+  setStatus(false, 'Run all scenarios complete — see evaluation summary below');
+}
+
 document.getElementById('runBtn').addEventListener('click', startReplay);
+document.getElementById('runAllBtn').addEventListener('click', runAllScenarios);
 document.getElementById('clearBtn').addEventListener('click', clearData);
 
 loadHistory();
