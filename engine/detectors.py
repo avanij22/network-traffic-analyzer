@@ -15,6 +15,7 @@ SPIKE_HISTORY = 6              # how many previous normal windows form the basel
 DNS_MIN_QUERIES = 100          # DNS queries from one host per window
 DNS_LONG_NAME = 50             # names longer than this many characters count as "long"
 DNS_MIN_LONG_QUERIES = 50      # long-name queries from one host per window
+UDP_FLOOD_MIN_PACKETS = 300   # UDP packets to one ip:port per window (excluding DNS, which has its own detector)
 
 
 def make_alert(start_ts, type_, severity, source_ip, explanation, details):
@@ -74,6 +75,30 @@ def detect_syn_flood(recs, start_ts):
                 f"{completion:.0%} were answered with SYN-ACK (possible SYN flood).",
                 {"target_ip": dst, "target_port": port, "syn_count": n,
                  "completion_ratio": round(completion, 3), "window_seconds": WINDOW}))
+    return alerts
+
+def detect_udp_flood(recs, start_ts):
+    """Many UDP packets aimed at one destination ip:port.
+    Unlike SYN flood, UDP has no handshake to check — the signature here is
+    pure volume, since UDP has no built-in concept of a completed connection.
+    DNS (port 53) is excluded since that traffic has its own dedicated detector."""
+    counts = Counter()
+    sources = defaultdict(Counter)
+    for r in recs:
+        if r["protocol"] == "UDP" and r["dst_port"] != 53:
+            key = (r["dst_ip"], r["dst_port"])
+            counts[key] += 1
+            sources[key][r["src_ip"]] += 1
+
+    alerts = []
+    for (dst, port), n in counts.items():
+        if n >= UDP_FLOOD_MIN_PACKETS:
+            top_src, _ = sources[(dst, port)].most_common(1)[0]
+            sev = "high" if n >= 1000 else "medium" if n >= 500 else "low"
+            alerts.append(make_alert(
+                start_ts, "udp_flood", sev, top_src,
+                f"{n} UDP packets hit {dst}:{port} in {WINDOW} seconds (possible UDP flood).",
+                {"target_ip": dst, "target_port": port, "packet_count": n, "window_seconds": WINDOW}))
     return alerts
 
 
@@ -266,6 +291,7 @@ def detect_pcap(path):
         all_alerts += detect_syn_flood(recs, start)
         all_alerts += detect_arp_spoof(recs, start, arp_table)
         all_alerts += detect_dns_anomaly(recs, start)
+        all_alerts += detect_udp_flood(recs, start)
         spike = detect_spike(stats, baseline, start)
         if spike:
             all_alerts.append(spike)
