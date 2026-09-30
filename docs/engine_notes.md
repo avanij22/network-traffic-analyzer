@@ -139,3 +139,9 @@ python engine/generate_pcaps.py
 | syn_flood.pcap | 1 syn_flood (4039 SYNs, 10s) + 1 traffic_spike |
 | arp_spoof.pcap | 1 arp_spoof |
 | dns_tunnel.pcap | 1 dns_anomaly (400 queries, 10s) + 1 traffic_spike |
+
+## Step 10: UDP flood detector
+- New file: engine/generate_udp_flood.py creates udp_flood.pcap (3000 UDP packets to port 9999 from 192.168.1.66).
+- detect_udp_flood() in detectors.py: >=300 UDP packets (excluding DNS, port 53) to one ip:port in a window.
+- Unlike SYN flood, there's no handshake-completion check, since UDP has no handshake. Detection is purely volume-based.
+- Result: udp_flood.pcap -> 1 udp_flood alert (2001 packets) + 1 traffic_spike. normal.pcap unaffected (0 alerts). syn_flood.pcap unaffected (no cross-triggering).

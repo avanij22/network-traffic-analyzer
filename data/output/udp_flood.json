@@ -1,0 +1,295 @@
+{
+  "file": "udp_flood.pcap",
+  "stats": [
+    {
+      "timestamp": "2023-11-14T22:13:20Z",
+      "window_seconds": 5,
+      "packets_per_sec": 50.2,
+      "bytes_per_sec": 13338.0,
+      "protocol_counts": {
+        "TCP": 169,
+        "DNS": 60,
+        "ICMP": 22
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.11",
+          "packets": 33,
+          "bytes": 10528
+        },
+        {
+          "ip": "192.168.1.18",
+          "packets": 28,
+          "bytes": 8231
+        },
+        {
+          "ip": "192.168.1.16",
+          "packets": 27,
+          "bytes": 7973
+        },
+        {
+          "ip": "192.168.1.17",
+          "packets": 27,
+          "bytes": 6024
+        },
+        {
+          "ip": "192.168.1.10",
+          "packets": 26,
+          "bytes": 9455
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 85
+        },
+        {
+          "port": 443,
+          "packets": 71
+        },
+        {
+          "port": 53,
+          "packets": 60
+        },
+        {
+          "port": 6140,
+          "packets": 1
+        },
+        {
+          "port": 59294,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:25Z",
+      "window_seconds": 5,
+      "packets_per_sec": 450.2,
+      "bytes_per_sec": 73598.6,
+      "protocol_counts": {
+        "TCP": 186,
+        "DNS": 44,
+        "ICMP": 20,
+        "UDP": 2001
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.66",
+          "packets": 2001,
+          "bytes": 303956
+        },
+        {
+          "ip": "192.168.1.17",
+          "packets": 33,
+          "bytes": 8641
+        },
+        {
+          "ip": "192.168.1.10",
+          "packets": 26,
+          "bytes": 5972
+        },
+        {
+          "ip": "192.168.1.19",
+          "packets": 26,
+          "bytes": 6316
+        },
+        {
+          "ip": "192.168.1.12",
+          "packets": 24,
+          "bytes": 7720
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 9999,
+          "packets": 2001
+        },
+        {
+          "port": 80,
+          "packets": 115
+        },
+        {
+          "port": 443,
+          "packets": 49
+        },
+        {
+          "port": 53,
+          "packets": 44
+        },
+        {
+          "port": 25026,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:30Z",
+      "window_seconds": 5,
+      "packets_per_sec": 249.8,
+      "bytes_per_sec": 42013.8,
+      "protocol_counts": {
+        "UDP": 999,
+        "ICMP": 25,
+        "TCP": 169,
+        "DNS": 56
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.66",
+          "packets": 999,
+          "bytes": 150987
+        },
+        {
+          "ip": "192.168.1.15",
+          "packets": 27,
+          "bytes": 5110
+        },
+        {
+          "ip": "192.168.1.17",
+          "packets": 26,
+          "bytes": 5465
+        },
+        {
+          "ip": "192.168.1.18",
+          "packets": 25,
+          "bytes": 6158
+        },
+        {
+          "ip": "192.168.1.13",
+          "packets": 24,
+          "bytes": 6884
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 9999,
+          "packets": 999
+        },
+        {
+          "port": 80,
+          "packets": 101
+        },
+        {
+          "port": 53,
+          "packets": 56
+        },
+        {
+          "port": 443,
+          "packets": 48
+        },
+        {
+          "port": 45681,
+          "packets": 1
+        }
+      ]
+    },
+    {
+      "timestamp": "2023-11-14T22:13:35Z",
+      "window_seconds": 5,
+      "packets_per_sec": 40.6,
+      "bytes_per_sec": 8794.0,
+      "protocol_counts": {
+        "TCP": 155,
+        "DNS": 41,
+        "ICMP": 7
+      },
+      "top_talkers": [
+        {
+          "ip": "192.168.1.17",
+          "packets": 29,
+          "bytes": 7956
+        },
+        {
+          "ip": "192.168.1.15",
+          "packets": 26,
+          "bytes": 6361
+        },
+        {
+          "ip": "192.168.1.10",
+          "packets": 26,
+          "bytes": 4095
+        },
+        {
+          "ip": "192.168.1.11",
+          "packets": 23,
+          "bytes": 5278
+        },
+        {
+          "ip": "192.168.1.100",
+          "packets": 22,
+          "bytes": 1188
+        }
+      ],
+      "top_ports": [
+        {
+          "port": 80,
+          "packets": 86
+        },
+        {
+          "port": 443,
+          "packets": 47
+        },
+        {
+          "port": 53,
+          "packets": 41
+        },
+        {
+          "port": 16401,
+          "packets": 1
+        },
+        {
+          "port": 36626,
+          "packets": 1
+        }
+      ]
+    }
+  ],
+  "alerts": [
+    {
+      "timestamp": "2023-11-14T22:13:25Z",
+      "type": "traffic_spike",
+      "severity": "high",
+      "source_ip": null,
+      "explanation": "Traffic rose to 450.2 packets/sec at its peak, against a recent average of 50.2 (peak z-score 79.7). (seen in 2 consecutive windows, 2023-11-14T22:13:25Z to 2023-11-14T22:13:30Z.)",
+      "details": {
+        "windows_merged": 2,
+        "per_window": [
+          {
+            "packets_per_sec": 450.2,
+            "baseline_mean": 50.2,
+            "z_score": 79.7
+          },
+          {
+            "packets_per_sec": 249.8,
+            "baseline_mean": 50.2,
+            "z_score": 39.8
+          }
+        ]
+      }
+    },
+    {
+      "timestamp": "2023-11-14T22:13:25Z",
+      "type": "udp_flood",
+      "severity": "high",
+      "source_ip": "192.168.1.66",
+      "explanation": "2001 UDP packets hit 192.168.1.100:9999 in 5 seconds (possible UDP flood).",
+      "details": {
+        "windows_merged": 2,
+        "per_window": [
+          {
+            "target_ip": "192.168.1.100",
+            "target_port": 9999,
+            "packet_count": 2001,
+            "window_seconds": 5
+          },
+          {
+            "target_ip": "192.168.1.100",
+            "target_port": 9999,
+            "packet_count": 999,
+            "window_seconds": 5
+          }
+        ]
+      }
+    }
+  ]
+}

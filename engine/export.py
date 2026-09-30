@@ -14,7 +14,7 @@ def analyze_pcap(path):
 
 if __name__ == "__main__":
     os.makedirs(OUT_DIR, exist_ok=True)
-    for name in ["normal", "port_scan", "syn_flood", "arp_spoof", "dns_tunnel"]:
+    for name in ["normal", "port_scan", "syn_flood", "arp_spoof", "dns_tunnel", "mixed", "udp_flood"]:
         result = analyze_pcap(os.path.join(DATA_DIR, f"{name}.pcap"))
         out = os.path.join(OUT_DIR, f"{name}.json")
         with open(out, "w") as f:
